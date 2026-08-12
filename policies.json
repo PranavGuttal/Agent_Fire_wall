@@ -1,0 +1,25 @@
+{
+  "email-summarizer-agent": {
+    "tools": {
+      "read_email": {},
+      "summarize_text": {}
+    }
+  },
+  "file-cleanup-agent": {
+    "tools": {
+      "list_files": {},
+      "delete_file": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^/tmp/cache/"
+            }
+          },
+          "required": ["path"]
+        }
+      }
+    }
+  }
+}
