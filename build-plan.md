@@ -41,10 +41,10 @@ FastAPI service. Each agent gets an Ed25519 keypair at registration (public key 
 **Day 3-4 — policy engine + argument validation** ✅ done
 Define policies as YAML or JSON: agent_id → allowed tools → JSON schema per tool's arguments. Validate both the tool name against the allowlist and the arguments against the schema before forwarding. Demo: an agent approved only for `read_file` gets blocked calling `send_email`; an agent approved for `read_file` but passing a path outside its allowed directory gets blocked by schema/arg validation.
 
-**Day 5 — audit log**
+**Day 5 — audit log** ✅ done
 Append-only log (SQLite is fine, or a flat file with hash chaining) recording every decision — allowed and denied — with agent_id, tool, args, decision, reason, timestamp, and hash of the previous entry. Add a small verification script that walks the chain and flags tampering. This is a strong, cheap "security" credential — build it solid.
 
-**Day 6-7 — sequence monitor (v1)**
+**Day 6-7 — sequence monitor (v1)** ✅ done
 Keep per-session state (a rolling window of recent calls per agent). Implement one real rule: read-sensitive-file → external-send within K calls triggers a block + high-severity audit entry. Make the rule config-driven (a small DSL or even just a list of {trigger, follow, window} tuples) so you can say "this generalizes" without having actually generalized it yet.
 
 **Day 8 — OpenTelemetry tracing**

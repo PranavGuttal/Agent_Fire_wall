@@ -1,0 +1,7 @@
+[
+  {
+    "trigger": "read_sensitive_file",
+    "follow": "send_email",
+    "window": 3
+  }
+]

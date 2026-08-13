@@ -13,6 +13,7 @@ from pathlib import Path
 import httpx
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from app.audit import verify_chain  # noqa: E402
 from app.identity import sign_request  # noqa: E402
 
 BASE_URL = "http://127.0.0.1:8000"
@@ -59,6 +60,12 @@ def main() -> None:
     assert resp.status_code == 200
 
     print("\nAll checks passed: policy engine blocks wrong tools AND bad arguments.")
+
+    print("\n6. Verifying the audit log recorded all 4 decisions with an intact hash chain...")
+    intact, bad_id = verify_chain()
+    print(f"   chain intact = {intact}")
+    assert intact, f"audit log chain broken at entry id={bad_id}"
+    print("   All 4 allow/deny decisions above are permanently recorded and tamper-evident.")
 
 
 if __name__ == "__main__":

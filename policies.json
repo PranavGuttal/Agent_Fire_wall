@@ -21,5 +21,12 @@
         }
       }
     }
+  },
+  "data-export-agent": {
+    "tools": {
+      "read_sensitive_file": {},
+      "send_email": {},
+      "log_status": {}
+    }
   }
 }

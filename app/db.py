@@ -30,6 +30,7 @@ def init_db() -> None:
                 tool_name TEXT,
                 decision TEXT NOT NULL,
                 reason TEXT,
+                severity TEXT NOT NULL DEFAULT 'normal',
                 timestamp TEXT NOT NULL,
                 prev_hash TEXT NOT NULL,
                 entry_hash TEXT NOT NULL
