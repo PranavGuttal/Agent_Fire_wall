@@ -28,5 +28,22 @@
       "send_email": {},
       "log_status": {}
     }
+  },
+  "filesystem-agent": {
+    "tools": {
+      "list_directory": {},
+      "read_file": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!.*\\.\\.)(?!/)(?![A-Za-z]:).+$"
+            }
+          },
+          "required": ["path"]
+        }
+      }
+    }
   }
 }

@@ -47,14 +47,18 @@ Append-only log (SQLite is fine, or a flat file with hash chaining) recording ev
 **Day 6-7 — sequence monitor (v1)** ✅ done
 Keep per-session state (a rolling window of recent calls per agent). Implement one real rule: read-sensitive-file → external-send within K calls triggers a block + high-severity audit entry. Make the rule config-driven (a small DSL or even just a list of {trigger, follow, window} tuples) so you can say "this generalizes" without having actually generalized it yet.
 
-**Day 8 — OpenTelemetry tracing**
+**Day 8 — OpenTelemetry tracing** ✅ done
 Instrument the FastAPI middleware so every proxied call creates a span with agent_id, tool_name, decision, and latency, and forwards trace context if the downstream tool is itself instrumented. Export to a local Jaeger or console exporter — you don't need a hosted backend for the demo, just a real trace waterfall you can screenshot or show live.
 
-**Day 9 — real MCP integration**
+**Day 9 — real MCP integration** ✅ done
 Wire this in front of an actual MCP server (filesystem or a simple custom one) and a real LangGraph agent, not synthetic requests. This is what separates "I built a demo" from "I built infrastructure." Even one real integration matters far more than more unit tests.
 
-**Day 10 — README, docs, demo script**
+Real MCP dispatch is done and verified (`app/mcp_client.py`, `scripts/demo_mcp_dispatch.py`) — `/proxy` calls a live `@modelcontextprotocol/server-filesystem` subprocess for filesystem tools. The LangGraph agent (`agent/langgraph_agent.py`, Groq-backed, `create_react_agent`) calls tools only through `/proxy` and has been run live end-to-end with a real `GROQ_API_KEY` — its real tool choice was verified, enforced, and audit-logged.
+
+**Day 10 — README, docs, demo script** ✅ done
 Write the README to lead with the problem (the CVE stat, the "who's actually enforcing this" gap), show the architecture diagram, and include a 2-minute "try it yourself" (docker-compose up, run three canned requests: one allowed, one denied by policy, one denied by sequence detection).
+
+README now leads with the problem and a Mermaid architecture diagram. `Dockerfile` + `docker-compose.yml` containerize the firewall itself (with Node.js so real MCP dispatch works inside the container) alongside Jaeger — `docker compose up -d --build` brings up the whole system. `scripts/try_it_yourself.py` fires the three canned requests (allowed / denied-by-policy / denied-by-sequence), verified against the containerized stack. Fixed two real bugs surfaced by containerizing: a stale `PyJWT==2.9.0` pin in `requirements.txt` conflicting with `mcp`'s `pyjwt>=2.10.1` requirement, and the OTLP trace exporter being hardcoded to `localhost` (now configurable via `OTLP_ENDPOINT`, since "localhost" means something different inside a container). `firewall.db` is bind-mounted so host-run scripts that read the audit log directly still work against the containerized server.
 
 ## What to explicitly NOT build for v1
 

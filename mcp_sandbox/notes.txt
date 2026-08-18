@@ -1,0 +1,8 @@
+These are demo notes served by the real MCP filesystem server.
+
+If an agent's tool call reaches this file through /proxy, it means:
+1. Its signed identity was verified.
+2. The policy engine allowed read_file for this agent.
+3. The sequence monitor found no violation.
+4. The call was logged into the tamper-evident audit chain.
+5. A real MCP server (not a stub) returned this exact text.
